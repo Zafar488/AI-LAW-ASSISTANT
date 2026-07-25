@@ -1,0 +1,6 @@
+{
+    "python.defaultInterpreterPath": "g:\\lawyer_chatbot\\lawyer_chatbot\\.venv_new\\Scripts\\python.exe",
+    "python.analysis.extraPaths": [
+        "g:\\lawyer_chatbot\\lawyer_chatbot\\.venv_new\\Lib\\site-packages"
+    ]
+}

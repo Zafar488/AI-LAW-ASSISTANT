@@ -1,0 +1,550 @@
+{
+  "completed_sources": [
+    "https://drs.molaw.gov.pk/documents",
+    "https://www.secp.gov.pk/laws/acts/",
+    "https://www.secp.gov.pk/laws/ordinances/",
+    "https://www.secp.gov.pk/laws/rules/"
+  ],
+  "failed_sources": {
+    "https://pakistancode.gov.pk/": {
+      "name": "Pakistan Code - Ministry of Law and Justice",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:29:35+00:00"
+    },
+    "https://www.na.gov.pk/en/print_act.php": {
+      "name": "National Assembly of Pakistan - Acts of Parliament",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:29:51+00:00"
+    },
+    "https://www.senate.gov.pk/en/acts.php": {
+      "name": "Senate of Pakistan - Acts",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:30:07+00:00"
+    },
+    "https://www.pcp.gov.pk/Download": {
+      "name": "Printing Corporation of Pakistan - Gazette Downloads",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:31:12+00:00"
+    },
+    "https://www.fbr.gov.pk/act-rules-ordinances/131226": {
+      "name": "Federal Board of Revenue - Acts, Ordinances and Rules",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:31:29+00:00"
+    },
+    "https://www.secp.gov.pk/laws/regulations/": {
+      "name": "Securities and Exchange Commission of Pakistan - Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:06:31+00:00"
+    },
+    "https://www.secp.gov.pk/laws/notifications/": {
+      "name": "Securities and Exchange Commission of Pakistan - Notifications",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:06:46+00:00"
+    },
+    "https://www.sbp.org.pk/laws-regulations": {
+      "name": "State Bank of Pakistan - Laws and Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:07:01+00:00"
+    },
+    "https://www.fmu.gov.pk/circulars-notifications/fmu-notifications/": {
+      "name": "Financial Monitoring Unit - Notifications",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:07:16+00:00"
+    },
+    "https://cc.gov.pk/home/mrtpo_law": {
+      "name": "Competition Commission of Pakistan - Competition Law",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:07:31+00:00"
+    },
+    "https://www.ppra.org.pk/Rules.asp": {
+      "name": "Public Procurement Regulatory Authority - Rules",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:07:46+00:00"
+    },
+    "https://www.ppra.org.pk/regulation.asp": {
+      "name": "Public Procurement Regulatory Authority - Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:08:00+00:00"
+    },
+    "https://ecp.gov.pk/electoral-laws-and-system": {
+      "name": "Election Commission of Pakistan - Electoral Laws and System",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:08:17+00:00"
+    },
+    "https://www.pta.gov.pk/category/rules-824773436-2023-05-30": {
+      "name": "Pakistan Telecommunication Authority - Rules",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:08:35+00:00"
+    },
+    "https://www.pta.gov.pk/category/regulations-1674158059-2023-05-30": {
+      "name": "Pakistan Telecommunication Authority - Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:08:51+00:00"
+    },
+    "https://pemra.gov.pk/legislation/": {
+      "name": "Pakistan Electronic Media Regulatory Authority - Legislation",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:09:06+00:00"
+    },
+    "https://www.pda.gov.pk/acts-and-regulations.php": {
+      "name": "Pakistan Digital Authority - Acts and Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:09:20+00:00"
+    },
+    "https://pvara.gov.pk/regulations": {
+      "name": "Pakistan Virtual Assets Regulatory Authority - Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:09:35+00:00"
+    },
+    "https://www.dra.gov.pk/about-us/legislation/acts/": {
+      "name": "Drug Regulatory Authority of Pakistan - Acts",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:09:49+00:00"
+    },
+    "https://www.dra.gov.pk/about-us/legislation/rules/": {
+      "name": "Drug Regulatory Authority of Pakistan - Rules",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:10:03+00:00"
+    },
+    "https://www.dra.gov.pk/about-us/legislation/regulations/": {
+      "name": "Drug Regulatory Authority of Pakistan - Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:10:22+00:00"
+    },
+    "https://www.nepra.org.pk/Legal.php": {
+      "name": "National Electric Power Regulatory Authority - Legal Framework",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:10:41+00:00"
+    },
+    "https://www.ogra.org.pk/codes": {
+      "name": "Oil and Gas Regulatory Authority - Codes, Laws, Rules and Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:11:00+00:00"
+    },
+    "https://petroleum.gov.pk/": {
+      "name": "Petroleum Division - Acts, Rules and Policies",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:11:20+00:00"
+    },
+    "https://environment.gov.pk/SiteImage/Misc/files/listlawregulation.pdf": {
+      "name": "Pakistan Environmental Protection Agency - List of Environmental Laws and Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:11:39+00:00"
+    },
+    "https://www.pnra.org/estab-rf-work.html": {
+      "name": "Pakistan Nuclear Regulatory Authority - Regulatory Framework",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:11:58+00:00"
+    },
+    "https://www.pnra.org/regulations.html": {
+      "name": "Pakistan Nuclear Regulatory Authority - Regulations",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:12:19+00:00"
+    },
+    "https://fia.gov.pk/laws": {
+      "name": "Federal Investigation Agency - Laws",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:12:42+00:00"
+    },
+    "https://nab.gov.pk/downloads/": {
+      "name": "National Accountability Bureau - Laws and Downloads",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:13:01+00:00"
+    },
+    "https://dgip.gov.pk/passport/downloads.php": {
+      "name": "Directorate General of Immigration and Passports - Passport Acts and Rules",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:13:22+00:00"
+    },
+    "https://dgps.gov.pk/Detail/NTM5Yjc4OGQtNWRiMC00NTE0LTk0YzEtMmFmZjQwMDNhZjVm": {
+      "name": "Directorate General Ports and Shipping - Maritime Laws",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:13:43+00:00"
+    },
+    "https://www.psw.gov.pk/public/trade-information-portal": {
+      "name": "Pakistan Single Window - Trade Information Portal",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:14:02+00:00"
+    },
+    "https://www.cda.gov.pk/lawsAndRegulations": {
+      "name": "Capital Development Authority - Laws and Regulations",
+      "jurisdiction": "Islamabad Capital Territory",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:14:22+00:00"
+    },
+    "https://www.mora.gov.pk/Detail/ODNkNTZjMDgtNjk1OS00YjhjLThkZGUtNWRkYTJlZWE4ZTY5": {
+      "name": "Ministry of Religious Affairs and Interfaith Harmony - Acts and Rules",
+      "jurisdiction": "Federal",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:14:44+00:00"
+    },
+    "https://punjablaws.gov.pk/": {
+      "name": "Punjab Laws Online",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:15:04+00:00"
+    },
+    "https://punjabcode.punjab.gov.pk/": {
+      "name": "Punjab Code",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:15:25+00:00"
+    },
+    "https://reg.pra.punjab.gov.pk/ptms/PRAAct.aspx": {
+      "name": "Punjab Revenue Authority - Tax Acts and Rules",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:15:48+00:00"
+    },
+    "https://excise.punjab.gov.pk/acts-and-rules": {
+      "name": "Punjab Excise, Taxation and Narcotics Control - Acts and Rules",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:16:10+00:00"
+    },
+    "https://pra-borpunjab.gov.pk/aboutus/laws": {
+      "name": "Punjab Land Records Authority - Laws",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:16:28+00:00"
+    },
+    "https://icid.punjab.gov.pk/governing_laws": {
+      "name": "Punjab Industries, Commerce, Investment and Skills Development Department - Governing Laws",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:16:48+00:00"
+    },
+    "https://pccmdpunjab.gov.pk/Acts%2C%20Rule%20%26%20Regulations": {
+      "name": "Punjab Agriculture Marketing Regulatory Authority - Acts, Rules and Regulations",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:17:10+00:00"
+    },
+    "https://ace.punjab.gov.pk/legislation-and-enforcement": {
+      "name": "Anti-Corruption Establishment Punjab - Legislation and Enforcement",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:17:29+00:00"
+    },
+    "https://gppl.punjab.gov.pk/gazette_notifications": {
+      "name": "Government Punjab Public Library - Gazette Notifications",
+      "jurisdiction": "Punjab",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:17:48+00:00"
+    },
+    "https://sindhlaws.gov.pk/Index.aspx": {
+      "name": "Sindh Laws - Law Department",
+      "jurisdiction": "Sindh",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:18:07+00:00"
+    },
+    "https://www.pas.gov.pk/acts": {
+      "name": "Provincial Assembly of Sindh - Acts",
+      "jurisdiction": "Sindh",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:18:28+00:00"
+    },
+    "https://www.srb.gos.pk/srb/acts-rules-amendments/": {
+      "name": "Sindh Revenue Board - Acts, Rules and Amendments",
+      "jurisdiction": "Sindh",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:18:47+00:00"
+    },
+    "https://kpcode.kp.gov.pk/": {
+      "name": "Khyber Pakhtunkhwa Code",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:19:06+00:00"
+    },
+    "https://www.pakp.gov.pk/all-acts/": {
+      "name": "Provincial Assembly of Khyber Pakhtunkhwa - All Acts",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:19:25+00:00"
+    },
+    "https://www.pakp.gov.pk/rules-of-business/": {
+      "name": "Provincial Assembly of Khyber Pakhtunkhwa - Rules of Business",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:19:46+00:00"
+    },
+    "https://kpra.gov.pk/acts/": {
+      "name": "Khyber Pakhtunkhwa Revenue Authority - Acts",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:20:05+00:00"
+    },
+    "https://revenue.kp.gov.pk/acts-rules/": {
+      "name": "Khyber Pakhtunkhwa Revenue and Estate Department - Acts and Rules",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:20:22+00:00"
+    },
+    "https://ioekp.gov.pk/?page_id=1281": {
+      "name": "Inspectorate of Electricity Khyber Pakhtunkhwa - Acts and Rules",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:20:42+00:00"
+    },
+    "https://industries.kp.gov.pk/public/department/directorate-general-of-industries-commerce/cms/actsrules": {
+      "name": "Khyber Pakhtunkhwa Industries and Commerce - Acts, Rules and Orders",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:21:01+00:00"
+    },
+    "https://www.swkpk.gov.pk/downloads.sw.php": {
+      "name": "Khyber Pakhtunkhwa Social Welfare Department - Acts and Rules",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:21:19+00:00"
+    },
+    "https://www.humanrights.kp.gov.pk/public/resources": {
+      "name": "Khyber Pakhtunkhwa Human Rights Directorate - Legal Resources",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:21:37+00:00"
+    },
+    "https://kpboit.gov.pk/about-us/kp-boit-act/": {
+      "name": "Khyber Pakhtunkhwa Board of Investment and Trade - Legal Framework",
+      "jurisdiction": "Khyber Pakhtunkhwa",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:21:57+00:00"
+    },
+    "https://balochistancode.gob.pk/": {
+      "name": "Balochistan Code",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:22:16+00:00"
+    },
+    "https://balochistan.gov.pk/acts/": {
+      "name": "Government of Balochistan - Acts",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:22:35+00:00"
+    },
+    "https://balochistan.gov.pk/departments-acts/": {
+      "name": "Government of Balochistan - Department Acts",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:22:53+00:00"
+    },
+    "https://balochistan.gov.pk/all-departments-rules-regulations/": {
+      "name": "Government of Balochistan - All Departments Rules and Regulations",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:23:12+00:00"
+    },
+    "https://pabalochistan.gov.pk/public/acts": {
+      "name": "Provincial Assembly of Balochistan - Acts",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:23:31+00:00"
+    },
+    "https://balochistan.gov.pk/law-and-parliamentary-affairs-department-downloads/acts/": {
+      "name": "Balochistan Law and Parliamentary Affairs Department - Acts",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:23:49+00:00"
+    },
+    "https://homedept.balochistan.gob.pk/downloads/": {
+      "name": "Balochistan Home Department - Acts and Rules",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:24:08+00:00"
+    },
+    "https://excise.balochistan.gov.pk/acts-ordinance-and-rules/": {
+      "name": "Balochistan Excise, Taxation and Anti-Narcotics Department - Acts, Ordinances and Rules",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:24:27+00:00"
+    },
+    "https://agriculture.balochistan.gov.pk/acts/": {
+      "name": "Balochistan Agriculture and Cooperatives Department - Acts and Policies",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:24:45+00:00"
+    },
+    "https://health.balochistan.gov.pk/acts/": {
+      "name": "Balochistan Health Department - Acts",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:25:04+00:00"
+    },
+    "https://www.pdma.gob.pk/about-us/pdma-actrules": {
+      "name": "Provincial Disaster Management Authority Balochistan - Act and Rules",
+      "jurisdiction": "Balochistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:25:20+00:00"
+    },
+    "https://law.gok.pk/acts/": {
+      "name": "AJK Law Department - Acts",
+      "jurisdiction": "Azad Jammu and Kashmir",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:25:36+00:00"
+    },
+    "https://law.gok.pk/ordinance/": {
+      "name": "AJK Law Department - Ordinances",
+      "jurisdiction": "Azad Jammu and Kashmir",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:25:51+00:00"
+    },
+    "https://law.gok.pk/adopted-laws-in-ajk/": {
+      "name": "AJK Law Department - Adopted Laws",
+      "jurisdiction": "Azad Jammu and Kashmir",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:26:05+00:00"
+    },
+    "https://law.gok.pk/download/": {
+      "name": "AJK Law Department - Notifications and Downloads",
+      "jurisdiction": "Azad Jammu and Kashmir",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:26:20+00:00"
+    },
+    "https://ajkassembly.gok.pk/acts/": {
+      "name": "AJK Legislative Assembly - Acts",
+      "jurisdiction": "Azad Jammu and Kashmir",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:26:35+00:00"
+    },
+    "https://www.sngadajk.gok.pk/policies-servicre-rules/": {
+      "name": "AJK Services and General Administration Department - Policies and Service Rules",
+      "jurisdiction": "Azad Jammu and Kashmir",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:26:51+00:00"
+    },
+    "https://gba.gov.pk/acts/": {
+      "name": "Gilgit-Baltistan Assembly - Acts",
+      "jurisdiction": "Gilgit-Baltistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:27:03+00:00"
+    },
+    "https://gba.gov.pk/publications/": {
+      "name": "Gilgit-Baltistan Assembly - Publications",
+      "jurisdiction": "Gilgit-Baltistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:27:19+00:00"
+    },
+    "https://gba.gov.pk/governance-order-2009/": {
+      "name": "Gilgit-Baltistan Assembly - Governance Order",
+      "jurisdiction": "Gilgit-Baltistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:27:36+00:00"
+    },
+    "https://gba.gov.pk/gilgit-baltistan-rules-of-procedure-and-conduct-of-business-2017/": {
+      "name": "Gilgit-Baltistan Assembly - Rules of Procedure and Conduct of Business",
+      "jurisdiction": "Gilgit-Baltistan",
+      "failed_urls": 1,
+      "errors": [],
+      "last_attempt": "2026-07-25T06:27:58+00:00"
+    }
+  },
+  "updated_at": "2026-07-25T08:39:35+00:00"
+}

@@ -1,0 +1,764 @@
+﻿{
+    "schema_version":  2,
+    "updated_at":  "2026-07-21",
+    "policy":  "Official government, legislature, regulator and official gazette sources only. Bills, draft bills and proposed legislation are excluded unless they have become enforceable Acts, Ordinances, Rules, Regulations, Orders, Notifications or other final legal instruments.",
+    "crawler_rules":  {
+                          "allowed_domains_policy":  "Follow only the configured official source domain and its official subdomains. Do not follow external mirrors, private legal databases, news sites, blogs or document-sharing platforms.",
+                          "allowed_document_types":  [
+                                                         "act",
+                                                         "ordinance",
+                                                         "rule",
+                                                         "regulation",
+                                                         "order",
+                                                         "notification",
+                                                         "gazette",
+                                                         "code",
+                                                         "bylaw",
+                                                         "rules_of_business",
+                                                         "rules_of_procedure",
+                                                         "constitutional_instrument",
+                                                         "final_amendment",
+                                                         "official_circular_with_legal_effect"
+                                                     ],
+                          "excluded_document_types":  [
+                                                          "bill",
+                                                          "draft_bill",
+                                                          "government_bill",
+                                                          "private_member_bill",
+                                                          "proposed_legislation",
+                                                          "consultation_draft",
+                                                          "committee_report",
+                                                          "press_release",
+                                                          "news_item",
+                                                          "speech",
+                                                          "tender",
+                                                          "job_notice"
+                                                      ],
+                          "exclude_url_patterns":  [
+                                                       "/bill/",
+                                                       "/bills/",
+                                                       "bill.php",
+                                                       "bills.php",
+                                                       "/draft/",
+                                                       "/drafts/",
+                                                       "draft-bill",
+                                                       "proposed-legislation",
+                                                       "private-member-bill",
+                                                       "government-bill"
+                                                   ],
+                          "exclude_title_patterns":  [
+                                                         "\\bDraft Bill\\b",
+                                                         "\\bGovernment Bill\\b",
+                                                         "\\bPrivate Member\u0027?s Bill\\b",
+                                                         "\\bProposed Bill\\b",
+                                                         "\\bBill No\\.?\\s*\\d+\\b",
+                                                         "\\bAs Introduced\\b",
+                                                         "\\bUnder Consideration\\b",
+                                                         "\\bCommittee Report\\b"
+                                                     ],
+                          "bill_exception_rule":  "A page or file containing the word \u0027bill\u0027 may be accepted only when the same official page clearly identifies the final instrument as an Act, gives an Act number or Gazette publication, and the fetched document itself is the enacted text.",
+                          "prefer_final_consolidated_text":  true,
+                          "prefer_gazette_over_secondary_copy":  true,
+                          "follow_html_links":  true,
+                          "follow_pdf_links":  true,
+                          "follow_doc_and_docx_links":  true,
+                          "extract_links_from_pdf":  true,
+                          "respect_robots_txt":  true,
+                          "rate_limit_requests_per_second":  0.5,
+                          "request_timeout_seconds":  45,
+                          "max_retries":  4,
+                          "retry_backoff_seconds":  [
+                                                        2,
+                                                        5,
+                                                        10,
+                                                        20
+                                                    ],
+                          "deduplicate_by":  [
+                                                 "normalized_title",
+                                                 "jurisdiction",
+                                                 "instrument_number",
+                                                 "promulgation_or_publication_date",
+                                                 "content_hash"
+                                             ],
+                          "minimum_metadata":  [
+                                                   "source_name",
+                                                   "source_url",
+                                                   "document_url",
+                                                   "jurisdiction",
+                                                   "document_type",
+                                                   "title",
+                                                   "publication_or_promulgation_date",
+                                                   "retrieved_at"
+                                               ],
+                          "recommended_metadata":  [
+                                                       "act_or_instrument_number",
+                                                       "gazette_number",
+                                                       "department_or_regulator",
+                                                       "amends",
+                                                       "repeals",
+                                                       "commencement_date",
+                                                       "language",
+                                                       "content_hash",
+                                                       "superseded_status",
+                                                       "consolidation_status"
+                                                   ],
+                          "acceptance_gate":  {
+                                                  "require_official_domain":  true,
+                                                  "require_final_legal_instrument":  true,
+                                                  "reject_if_only_bill_or_draft":  true,
+                                                  "reject_broken_or_empty_documents":  true,
+                                                  "reject_login_or_captcha_pages_as_documents":  true,
+                                                  "reject_duplicate_content_hash":  true
+                                              }
+                      },
+    "official_sources":  [
+                             {
+                                 "name":  "Pakistan Code - Ministry of Law and Justice",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://pakistancode.gov.pk/",
+                                 "source_type":  "consolidated_code",
+                                 "discover_links":  true,
+                                 "max_pages":  1800
+                             },
+                             {
+                                 "name":  "Ministry of Law and Justice - Document Retrieval System",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://drs.molaw.gov.pk/documents",
+                                 "source_type":  "gazette_and_notifications_repository",
+                                 "discover_links":  true,
+                                 "max_pages":  1500
+                             },
+                             {
+                                 "name":  "National Assembly of Pakistan - Acts of Parliament",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.na.gov.pk/en/print_act.php",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "Senate of Pakistan - Acts",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.senate.gov.pk/en/acts.php",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "Printing Corporation of Pakistan - Gazette Downloads",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.pcp.gov.pk/Download",
+                                 "source_type":  "official_gazette_repository",
+                                 "discover_links":  true,
+                                 "max_pages":  2000
+                             },
+                             {
+                                 "name":  "Federal Board of Revenue - Acts, Ordinances and Rules",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.fbr.gov.pk/act-rules-ordinances/131226",
+                                 "source_type":  "tax_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  800
+                             },
+                             {
+                                 "name":  "Securities and Exchange Commission of Pakistan - Acts",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.secp.gov.pk/laws/acts/",
+                                 "source_type":  "corporate_acts",
+                                 "discover_links":  true,
+                                 "max_pages":  900
+                             },
+                             {
+                                 "name":  "Securities and Exchange Commission of Pakistan - Ordinances",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.secp.gov.pk/laws/ordinances/",
+                                 "source_type":  "corporate_ordinances",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Securities and Exchange Commission of Pakistan - Rules",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.secp.gov.pk/laws/rules/",
+                                 "source_type":  "corporate_rules",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "Securities and Exchange Commission of Pakistan - Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.secp.gov.pk/laws/regulations/",
+                                 "source_type":  "corporate_regulations",
+                                 "discover_links":  true,
+                                 "max_pages":  1200
+                             },
+                             {
+                                 "name":  "Securities and Exchange Commission of Pakistan - Notifications",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.secp.gov.pk/laws/notifications/",
+                                 "source_type":  "corporate_notifications",
+                                 "discover_links":  true,
+                                 "max_pages":  1200
+                             },
+                             {
+                                 "name":  "State Bank of Pakistan - Laws and Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.sbp.org.pk/laws-regulations",
+                                 "source_type":  "banking_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  1200
+                             },
+                             {
+                                 "name":  "Financial Monitoring Unit - Notifications",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.fmu.gov.pk/circulars-notifications/fmu-notifications/",
+                                 "source_type":  "aml_cft_notifications",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Competition Commission of Pakistan - Competition Law",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://cc.gov.pk/home/mrtpo_law",
+                                 "source_type":  "competition_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Public Procurement Regulatory Authority - Rules",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.ppra.org.pk/Rules.asp",
+                                 "source_type":  "procurement_rules",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Public Procurement Regulatory Authority - Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.ppra.org.pk/regulation.asp",
+                                 "source_type":  "procurement_regulations",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Election Commission of Pakistan - Electoral Laws and System",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://ecp.gov.pk/electoral-laws-and-system",
+                                 "source_type":  "election_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Pakistan Telecommunication Authority - Rules",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.pta.gov.pk/category/rules-824773436-2023-05-30",
+                                 "source_type":  "telecom_rules",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Pakistan Telecommunication Authority - Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.pta.gov.pk/category/regulations-1674158059-2023-05-30",
+                                 "source_type":  "telecom_regulations",
+                                 "discover_links":  true,
+                                 "max_pages":  900
+                             },
+                             {
+                                 "name":  "Pakistan Electronic Media Regulatory Authority - Legislation",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://pemra.gov.pk/legislation/",
+                                 "source_type":  "media_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Pakistan Digital Authority - Acts and Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.pda.gov.pk/acts-and-regulations.php",
+                                 "source_type":  "digital_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  400
+                             },
+                             {
+                                 "name":  "Pakistan Virtual Assets Regulatory Authority - Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://pvara.gov.pk/regulations",
+                                 "source_type":  "virtual_assets_regulations",
+                                 "discover_links":  true,
+                                 "max_pages":  400
+                             },
+                             {
+                                 "name":  "Drug Regulatory Authority of Pakistan - Acts",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.dra.gov.pk/about-us/legislation/acts/",
+                                 "source_type":  "drug_acts",
+                                 "discover_links":  true,
+                                 "max_pages":  600
+                             },
+                             {
+                                 "name":  "Drug Regulatory Authority of Pakistan - Rules",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.dra.gov.pk/about-us/legislation/rules/",
+                                 "source_type":  "drug_rules",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Drug Regulatory Authority of Pakistan - Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.dra.gov.pk/about-us/legislation/regulations/",
+                                 "source_type":  "drug_regulations",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "National Electric Power Regulatory Authority - Legal Framework",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.nepra.org.pk/Legal.php",
+                                 "source_type":  "energy_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  1200
+                             },
+                             {
+                                 "name":  "Oil and Gas Regulatory Authority - Codes, Laws, Rules and Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.ogra.org.pk/codes",
+                                 "source_type":  "energy_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  900
+                             },
+                             {
+                                 "name":  "Petroleum Division - Acts, Rules and Policies",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://petroleum.gov.pk/",
+                                 "source_type":  "petroleum_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  900
+                             },
+                             {
+                                 "name":  "Pakistan Environmental Protection Agency - List of Environmental Laws and Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://environment.gov.pk/SiteImage/Misc/files/listlawregulation.pdf",
+                                 "source_type":  "environment_laws_index_pdf",
+                                 "discover_links":  false,
+                                 "max_pages":  100
+                             },
+                             {
+                                 "name":  "Pakistan Nuclear Regulatory Authority - Regulatory Framework",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.pnra.org/estab-rf-work.html",
+                                 "source_type":  "nuclear_regulatory_framework",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Pakistan Nuclear Regulatory Authority - Regulations",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.pnra.org/regulations.html",
+                                 "source_type":  "nuclear_regulations",
+                                 "discover_links":  true,
+                                 "max_pages":  800
+                             },
+                             {
+                                 "name":  "Federal Investigation Agency - Laws",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://fia.gov.pk/laws",
+                                 "source_type":  "federal_investigation_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "National Accountability Bureau - Laws and Downloads",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://nab.gov.pk/downloads/",
+                                 "source_type":  "accountability_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Directorate General of Immigration and Passports - Passport Acts and Rules",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://dgip.gov.pk/passport/downloads.php",
+                                 "source_type":  "immigration_and_passport_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  400
+                             },
+                             {
+                                 "name":  "Directorate General Ports and Shipping - Maritime Laws",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://dgps.gov.pk/Detail/NTM5Yjc4OGQtNWRiMC00NTE0LTk0YzEtMmFmZjQwMDNhZjVm",
+                                 "source_type":  "maritime_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  600
+                             },
+                             {
+                                 "name":  "Pakistan Single Window - Trade Information Portal",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.psw.gov.pk/public/trade-information-portal",
+                                 "source_type":  "trade_laws_and_regulations",
+                                 "discover_links":  true,
+                                 "max_pages":  1200
+                             },
+                             {
+                                 "name":  "Capital Development Authority - Laws and Regulations",
+                                 "jurisdiction":  "Islamabad Capital Territory",
+                                 "url":  "https://www.cda.gov.pk/lawsAndRegulations",
+                                 "source_type":  "ict_local_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Ministry of Religious Affairs and Interfaith Harmony - Acts and Rules",
+                                 "jurisdiction":  "Federal",
+                                 "url":  "https://www.mora.gov.pk/Detail/ODNkNTZjMDgtNjk1OS00YjhjLThkZGUtNWRkYTJlZWE4ZTY5",
+                                 "source_type":  "religious_affairs_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  400
+                             },
+                             {
+                                 "name":  "Punjab Laws Online",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://punjablaws.gov.pk/",
+                                 "source_type":  "consolidated_code",
+                                 "discover_links":  true,
+                                 "max_pages":  2000
+                             },
+                             {
+                                 "name":  "Punjab Code",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://punjabcode.punjab.gov.pk/",
+                                 "source_type":  "consolidated_code",
+                                 "discover_links":  true,
+                                 "max_pages":  1800
+                             },
+                             {
+                                 "name":  "Punjab Revenue Authority - Tax Acts and Rules",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://reg.pra.punjab.gov.pk/ptms/PRAAct.aspx",
+                                 "source_type":  "tax_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  600
+                             },
+                             {
+                                 "name":  "Punjab Excise, Taxation and Narcotics Control - Acts and Rules",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://excise.punjab.gov.pk/acts-and-rules",
+                                 "source_type":  "tax_and_excise_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Punjab Land Records Authority - Laws",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://pra-borpunjab.gov.pk/aboutus/laws",
+                                 "source_type":  "land_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Punjab Industries, Commerce, Investment and Skills Development Department - Governing Laws",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://icid.punjab.gov.pk/governing_laws",
+                                 "source_type":  "industry_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Punjab Agriculture Marketing Regulatory Authority - Acts, Rules and Regulations",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://pccmdpunjab.gov.pk/Acts%2C%20Rule%20%26%20Regulations",
+                                 "source_type":  "agriculture_market_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Anti-Corruption Establishment Punjab - Legislation and Enforcement",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://ace.punjab.gov.pk/legislation-and-enforcement",
+                                 "source_type":  "anti_corruption_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Government Punjab Public Library - Gazette Notifications",
+                                 "jurisdiction":  "Punjab",
+                                 "url":  "https://gppl.punjab.gov.pk/gazette_notifications",
+                                 "source_type":  "provincial_gazette_notifications",
+                                 "discover_links":  true,
+                                 "max_pages":  1200
+                             },
+                             {
+                                 "name":  "Sindh Laws - Law Department",
+                                 "jurisdiction":  "Sindh",
+                                 "url":  "https://sindhlaws.gov.pk/Index.aspx",
+                                 "source_type":  "consolidated_code",
+                                 "discover_links":  true,
+                                 "max_pages":  2000
+                             },
+                             {
+                                 "name":  "Provincial Assembly of Sindh - Acts",
+                                 "jurisdiction":  "Sindh",
+                                 "url":  "https://www.pas.gov.pk/acts",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1400
+                             },
+                             {
+                                 "name":  "Sindh Revenue Board - Acts, Rules and Amendments",
+                                 "jurisdiction":  "Sindh",
+                                 "url":  "https://www.srb.gos.pk/srb/acts-rules-amendments/",
+                                 "source_type":  "tax_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "Khyber Pakhtunkhwa Code",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://kpcode.kp.gov.pk/",
+                                 "source_type":  "consolidated_code",
+                                 "discover_links":  true,
+                                 "max_pages":  2000
+                             },
+                             {
+                                 "name":  "Provincial Assembly of Khyber Pakhtunkhwa - All Acts",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://www.pakp.gov.pk/all-acts/",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1400
+                             },
+                             {
+                                 "name":  "Provincial Assembly of Khyber Pakhtunkhwa - Rules of Business",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://www.pakp.gov.pk/rules-of-business/",
+                                 "source_type":  "rules_of_business",
+                                 "discover_links":  true,
+                                 "max_pages":  300
+                             },
+                             {
+                                 "name":  "Khyber Pakhtunkhwa Revenue Authority - Acts",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://kpra.gov.pk/acts/",
+                                 "source_type":  "tax_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Khyber Pakhtunkhwa Revenue and Estate Department - Acts and Rules",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://revenue.kp.gov.pk/acts-rules/",
+                                 "source_type":  "revenue_and_land_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Inspectorate of Electricity Khyber Pakhtunkhwa - Acts and Rules",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://ioekp.gov.pk/?page_id=1281",
+                                 "source_type":  "electricity_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  400
+                             },
+                             {
+                                 "name":  "Khyber Pakhtunkhwa Industries and Commerce - Acts, Rules and Orders",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://industries.kp.gov.pk/public/department/directorate-general-of-industries-commerce/cms/actsrules",
+                                 "source_type":  "industry_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  600
+                             },
+                             {
+                                 "name":  "Khyber Pakhtunkhwa Social Welfare Department - Acts and Rules",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://www.swkpk.gov.pk/downloads.sw.php",
+                                 "source_type":  "social_welfare_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Khyber Pakhtunkhwa Human Rights Directorate - Legal Resources",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://www.humanrights.kp.gov.pk/public/resources",
+                                 "source_type":  "human_rights_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Khyber Pakhtunkhwa Board of Investment and Trade - Legal Framework",
+                                 "jurisdiction":  "Khyber Pakhtunkhwa",
+                                 "url":  "https://kpboit.gov.pk/about-us/kp-boit-act/",
+                                 "source_type":  "investment_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  300
+                             },
+                             {
+                                 "name":  "Balochistan Code",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://balochistancode.gob.pk/",
+                                 "source_type":  "consolidated_code",
+                                 "discover_links":  true,
+                                 "max_pages":  2000
+                             },
+                             {
+                                 "name":  "Government of Balochistan - Acts",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://balochistan.gov.pk/acts/",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  900
+                             },
+                             {
+                                 "name":  "Government of Balochistan - Department Acts",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://balochistan.gov.pk/departments-acts/",
+                                 "source_type":  "departmental_acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "Government of Balochistan - All Departments Rules and Regulations",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://balochistan.gov.pk/all-departments-rules-regulations/",
+                                 "source_type":  "departmental_rules_and_regulations",
+                                 "discover_links":  true,
+                                 "max_pages":  1200
+                             },
+                             {
+                                 "name":  "Provincial Assembly of Balochistan - Acts",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://pabalochistan.gov.pk/public/acts",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1200
+                             },
+                             {
+                                 "name":  "Balochistan Law and Parliamentary Affairs Department - Acts",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://balochistan.gov.pk/law-and-parliamentary-affairs-department-downloads/acts/",
+                                 "source_type":  "law_department_acts",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "Balochistan Home Department - Acts and Rules",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://homedept.balochistan.gob.pk/downloads/",
+                                 "source_type":  "home_department_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  600
+                             },
+                             {
+                                 "name":  "Balochistan Excise, Taxation and Anti-Narcotics Department - Acts, Ordinances and Rules",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://excise.balochistan.gov.pk/acts-ordinance-and-rules/",
+                                 "source_type":  "tax_and_excise_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  600
+                             },
+                             {
+                                 "name":  "Balochistan Agriculture and Cooperatives Department - Acts and Policies",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://agriculture.balochistan.gov.pk/acts/",
+                                 "source_type":  "agriculture_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Balochistan Health Department - Acts",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://health.balochistan.gov.pk/acts/",
+                                 "source_type":  "health_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  500
+                             },
+                             {
+                                 "name":  "Provincial Disaster Management Authority Balochistan - Act and Rules",
+                                 "jurisdiction":  "Balochistan",
+                                 "url":  "https://www.pdma.gob.pk/about-us/pdma-actrules",
+                                 "source_type":  "disaster_management_laws",
+                                 "discover_links":  true,
+                                 "max_pages":  400
+                             },
+                             {
+                                 "name":  "AJK Law Department - Acts",
+                                 "jurisdiction":  "Azad Jammu and Kashmir",
+                                 "url":  "https://law.gok.pk/acts/",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "AJK Law Department - Ordinances",
+                                 "jurisdiction":  "Azad Jammu and Kashmir",
+                                 "url":  "https://law.gok.pk/ordinance/",
+                                 "source_type":  "ordinances_index",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "AJK Law Department - Adopted Laws",
+                                 "jurisdiction":  "Azad Jammu and Kashmir",
+                                 "url":  "https://law.gok.pk/adopted-laws-in-ajk/",
+                                 "source_type":  "adopted_laws_index",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "AJK Law Department - Notifications and Downloads",
+                                 "jurisdiction":  "Azad Jammu and Kashmir",
+                                 "url":  "https://law.gok.pk/download/",
+                                 "source_type":  "legal_notifications_and_downloads",
+                                 "discover_links":  true,
+                                 "max_pages":  900
+                             },
+                             {
+                                 "name":  "AJK Legislative Assembly - Acts",
+                                 "jurisdiction":  "Azad Jammu and Kashmir",
+                                 "url":  "https://ajkassembly.gok.pk/acts/",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "AJK Services and General Administration Department - Policies and Service Rules",
+                                 "jurisdiction":  "Azad Jammu and Kashmir",
+                                 "url":  "https://www.sngadajk.gok.pk/policies-servicre-rules/",
+                                 "source_type":  "service_rules",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Gilgit-Baltistan Assembly - Acts",
+                                 "jurisdiction":  "Gilgit-Baltistan",
+                                 "url":  "https://gba.gov.pk/acts/",
+                                 "source_type":  "acts_index",
+                                 "discover_links":  true,
+                                 "max_pages":  1000
+                             },
+                             {
+                                 "name":  "Gilgit-Baltistan Assembly - Publications",
+                                 "jurisdiction":  "Gilgit-Baltistan",
+                                 "url":  "https://gba.gov.pk/publications/",
+                                 "source_type":  "legislative_publications",
+                                 "discover_links":  true,
+                                 "max_pages":  700
+                             },
+                             {
+                                 "name":  "Gilgit-Baltistan Assembly - Governance Order",
+                                 "jurisdiction":  "Gilgit-Baltistan",
+                                 "url":  "https://gba.gov.pk/governance-order-2009/",
+                                 "source_type":  "constitutional_and_governance_instruments",
+                                 "discover_links":  true,
+                                 "max_pages":  300
+                             },
+                             {
+                                 "name":  "Gilgit-Baltistan Assembly - Rules of Procedure and Conduct of Business",
+                                 "jurisdiction":  "Gilgit-Baltistan",
+                                 "url":  "https://gba.gov.pk/gilgit-baltistan-rules-of-procedure-and-conduct-of-business-2017/",
+                                 "source_type":  "rules_of_procedure",
+                                 "discover_links":  true,
+                                 "max_pages":  300
+                             }
+                         ]
+}
