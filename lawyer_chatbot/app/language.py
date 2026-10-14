@@ -12,9 +12,10 @@ LANGUAGE_NAMES = {"en": "English", "ur": "Urdu", "hi": "Hindi", "ps": "Pashto"}
 TTS_LOCALES = {"en": "en-US", "ur": "ur-PK", "hi": "hi-IN", "ps": "ps-AF"}
 _DEVANAGARI = re.compile(r"[\u0900-\u097f]")
 _ARABIC = re.compile(r"[\u0600-\u06ff]")
-_PASHTO_CHARS = set("ځڅډړږښګڼېۍ")
-_URDU_CHARS = set("ٹڈڑںھہےکگچپژ")
-_PASHTO_WORDS = {"زه", "ته", "دی", "ده", "دي", "وشي", "شوی", "شوې", "څه", "څنګه", "کوم"}
+_PASHTO_UNIQUE_CHARS = set("ځڅښګڼۍ")
+_URDU_UNIQUE_CHARS = set("ٹڈڑںےھ")
+_URDU_COMMON_WORDS = {"ہے", "ہیں", "تھا", "تھی", "تھے", "کے", "کی", "کا", "کو", "میں", "سے", "نے", "پر", "ہو", "ہوا", "ہوئی", "ہوئے", "اور", "کر", "کیا", "یہ", "وہ", "اگر", "تو", "پاس"}
+_PASHTO_WORDS = {"زه", "موږ", "کوي", "کولای", "شوي", "شوې", "څنګه", "ولې", "ستاسو", "پوښتنه", "وشي"}
 
 
 def detect_language(text: str, fallback: str = "en") -> str:
@@ -26,9 +27,17 @@ def detect_language(text: str, fallback: str = "en") -> str:
         return "hi"
     if _ARABIC.search(cleaned):
         words = set(re.findall(r"[\u0600-\u06ff]+", cleaned))
-        if any(char in _PASHTO_CHARS for char in cleaned) or words.intersection(_PASHTO_WORDS):
+        # Prioritize Urdu if common Urdu markers/characters exist without unique Pashto letters
+        has_urdu_chars = any(char in _URDU_UNIQUE_CHARS for char in cleaned)
+        has_urdu_words = bool(words.intersection(_URDU_COMMON_WORDS))
+        has_pashto_chars = any(char in _PASHTO_UNIQUE_CHARS for char in cleaned)
+        has_pashto_words = bool(words.intersection(_PASHTO_WORDS))
+
+        if (has_urdu_chars or has_urdu_words) and not has_pashto_chars:
+            return "ur"
+        if has_pashto_chars or has_pashto_words:
             return "ps"
-        if any(char in _URDU_CHARS for char in cleaned):
+        if has_urdu_chars or has_urdu_words:
             return "ur"
         try:
             return "ps" if detect(cleaned) == "ps" else "ur"

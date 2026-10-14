@@ -33,6 +33,7 @@ from io import BytesIO
 from pathlib import Path, PurePosixPath
 from typing import Any, Iterable, Iterator, Mapping, Sequence
 from urllib.parse import parse_qsl, urlencode, urldefrag, urljoin, urlparse, urlunparse
+from urllib.robotparser import RobotFileParser
 
 import fitz
 import requests
@@ -368,6 +369,57 @@ def host_key(url_or_host: str) -> str:
     return host[4:] if host.startswith("www.") else host
 
 
+def is_host_allowed(url_or_host: str, allowed_hosts: set[str] | None) -> bool:
+    if not allowed_hosts:
+        return True
+    h = host_key(url_or_host)
+    if not h:
+        return False
+    for allowed in allowed_hosts:
+        a = host_key(allowed)
+        if h == a or h.endswith("." + a):
+            return True
+    return False
+
+
+class RobotsPolicy:
+    """Enforces robots.txt per host when enabled."""
+
+    def __init__(self, enabled: bool = True, timeout: float = 8.0):
+        self.enabled = enabled
+        self.timeout = timeout
+        self._parsers: dict[str, RobotFileParser | None] = {}
+
+    def can_fetch(self, url: str, user_agent: str = USER_AGENT) -> bool:
+        if not self.enabled:
+            return True
+        parsed = urlparse(url)
+        if not parsed.scheme or not parsed.hostname:
+            return False
+        host = parsed.hostname.lower()
+        if host not in self._parsers:
+            robots_url = f"{parsed.scheme}://{parsed.netloc}/robots.txt"
+            rp = RobotFileParser()
+            try:
+                resp = requests.get(
+                    robots_url,
+                    timeout=self.timeout,
+                    headers={"User-Agent": user_agent},
+                    verify=True,
+                )
+                if resp.status_code == 200:
+                    rp.parse(resp.text.splitlines())
+                    self._parsers[host] = rp
+                else:
+                    self._parsers[host] = None  # Allow if 404/unavailable
+            except Exception:
+                self._parsers[host] = None
+        parser = self._parsers.get(host)
+        if parser is None:
+            return True
+        return parser.can_fetch(user_agent, url)
+
+
 def safe_int(value: Any, default: int, *, minimum: int = 1) -> int:
     try:
         return max(minimum, int(value))
@@ -426,6 +478,7 @@ def create_scraping_session() -> requests.Session:
 
     session = requests.Session()
     session.max_redirects = MAX_REDIRECTS
+    session.verify = True  # Strict TLS certificate verification
     session.mount("http://", adapter)
     session.mount("https://", adapter)
     session.headers.update(
@@ -444,22 +497,52 @@ def create_scraping_session() -> requests.Session:
     return session
 
 
-def fetch_response(session: requests.Session, url: str) -> requests.Response | None:
+def fetch_response(
+    session: requests.Session,
+    url: str,
+    *,
+    allowed_hosts: set[str] | None = None,
+    robots_policy: RobotsPolicy | None = None,
+) -> requests.Response | None:
     if should_skip_url(url):
         LOGGER.debug("Skipping blocked or unsupported URL: %s", url)
         return None
 
     canonical = canonicalize_url(url)
+    if not canonical:
+        return None
+
+    if allowed_hosts and not is_host_allowed(canonical, allowed_hosts):
+        LOGGER.warning("URL host not in allowed hosts list: %s", canonical)
+        return None
+
+    if robots_policy and not robots_policy.can_fetch(canonical):
+        LOGGER.info("robots.txt disallowed: %s", canonical)
+        return None
+
     try:
         response = session.get(
             canonical,
             timeout=(CONNECT_TIMEOUT_SECONDS, READ_TIMEOUT_SECONDS),
             allow_redirects=True,
             stream=True,
+            verify=True,
         )
     except requests.RequestException as exc:
         LOGGER.warning("Request failed: %s -> %s", canonical, exc)
         return None
+
+    # Enforce redirect domain boundary check
+    if allowed_hosts:
+        for hop in response.history:
+            if not is_host_allowed(hop.url, allowed_hosts):
+                LOGGER.warning("Redirect hop crossed domain boundary: %s (hop %s)", canonical, hop.url)
+                response.close()
+                return None
+        if not is_host_allowed(response.url, allowed_hosts):
+            LOGGER.warning("Redirect destination crossed domain boundary: %s -> %s", canonical, response.url)
+            response.close()
+            return None
 
     if response.status_code != 200:
         LOGGER.warning("HTTP %s: %s", response.status_code, canonical)
@@ -509,9 +592,17 @@ def fetch_response(session: requests.Session, url: str) -> requests.Response | N
 def fetch_with_fallbacks(
     session: requests.Session,
     urls: Sequence[str],
+    *,
+    allowed_hosts: set[str] | None = None,
+    robots_policy: RobotsPolicy | None = None,
 ) -> requests.Response | None:
     for candidate in urls:
-        response = fetch_response(session, candidate)
+        response = fetch_response(
+            session,
+            candidate,
+            allowed_hosts=allowed_hosts,
+            robots_policy=robots_policy,
+        )
         if response is not None:
             return response
     return None
@@ -793,9 +884,17 @@ def extract_pdf_pages_from_bytes(
 
     try:
         import numpy as np
-        from rapidocr import RapidOCR
+        try:
+            from rapidocr import RapidOCR
+        except ImportError:
+            from rapidocr_onnxruntime import RapidOCR
     except ImportError:
-        LOGGER.warning("OCR requested but rapidocr/numpy is not installed: %s", source)
+        LOGGER.error(
+            "OCR requested via --ocr-local-pdfs or --ocr-remote-pdfs, but 'rapidocr-onnxruntime' "
+            "is not installed. To extract text from scanned PDFs, install it via: "
+            "'pip install rapidocr-onnxruntime'. Skipping OCR for %s.",
+            source,
+        )
         return []
 
     LOGGER.info("No embedded text found; running OCR: %s", source)
@@ -1312,7 +1411,7 @@ def deduplicate_chunks(chunks: Sequence[dict[str, Any]]) -> list[dict[str, Any]]
 
 
 # ---------------------------------------------------------------------------
-# FAISS index creation
+# FAISS index creation and management
 # ---------------------------------------------------------------------------
 def create_faiss_index(chunks: Sequence[Mapping[str, Any]]):
     import faiss
@@ -1334,11 +1433,13 @@ def create_faiss_index(chunks: Sequence[Mapping[str, Any]]):
     )
     embeddings = np.ascontiguousarray(embeddings, dtype="float32")
 
-    metric = os.getenv("FAISS_METRIC", "l2").strip().casefold()
-    if metric == "cosine":
+    metric = os.getenv("FAISS_METRIC", "cosine").strip().casefold()
+    if metric in ("cosine", "inner_product", "ip"):
+        metric = "cosine"
         faiss.normalize_L2(embeddings)
         index = faiss.IndexFlatIP(embeddings.shape[1])
     else:
+        LOGGER.warning("Non-default FAISS_METRIC '%s' configured; building IndexFlatL2.", metric)
         metric = "l2"
         index = faiss.IndexFlatL2(embeddings.shape[1])
 
@@ -1353,27 +1454,142 @@ def create_faiss_index(chunks: Sequence[Mapping[str, Any]]):
     return index, model, manifest
 
 
-def save_faiss_artifacts(chunks: Sequence[dict[str, Any]]) -> None:
+def save_faiss_artifacts(
+    chunks: Sequence[dict[str, Any]],
+    *,
+    index: Any | None = None,
+    manifest: dict[str, Any] | None = None,
+) -> None:
+    """Stage and atomically publish FAISS index, chunk metadata, and manifest with count validation."""
     import faiss
 
     EMBEDDINGS_PATH.mkdir(parents=True, exist_ok=True)
-    index, _model, manifest = create_faiss_index(chunks)
+    if index is None or manifest is None:
+        index, _model, manifest = create_faiss_index(chunks)
+
+    chunk_list = list(chunks)
+    if index.ntotal != len(chunk_list):
+        raise ValueError(
+            f"Cannot publish mismatched FAISS artifacts: index has {index.ntotal} vectors, "
+            f"chunks list has {len(chunk_list)} items."
+        )
 
     final_index = EMBEDDINGS_PATH / "faiss.index"
-    temp_index = EMBEDDINGS_PATH / ".faiss.index.tmp"
-    faiss.write_index(index, str(temp_index))
-    os.replace(temp_index, final_index)
-
     final_chunks = EMBEDDINGS_PATH / "chunks.pkl"
+    final_manifest = EMBEDDINGS_PATH / "index_manifest.json"
+
+    temp_index = EMBEDDINGS_PATH / ".faiss.index.tmp"
     temp_chunks = EMBEDDINGS_PATH / ".chunks.pkl.tmp"
+    temp_manifest = EMBEDDINGS_PATH / ".index_manifest.tmp"
+
+    # Stage all artifacts before publishing
+    faiss.write_index(index, str(temp_index))
     with temp_chunks.open("wb") as handle:
-        pickle.dump(list(chunks), handle, protocol=pickle.HIGHEST_PROTOCOL)
+        pickle.dump(chunk_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
         handle.flush()
         os.fsync(handle.fileno())
-    os.replace(temp_chunks, final_chunks)
 
-    atomic_write_json(EMBEDDINGS_PATH / "index_manifest.json", manifest)
-    LOGGER.info("Saved FAISS index and metadata for %s chunks.", len(chunks))
+    atomic_write_json(temp_manifest, manifest)
+
+    # Publish all staged artifacts safely
+    os.replace(temp_index, final_index)
+    os.replace(temp_chunks, final_chunks)
+    os.replace(temp_manifest, final_manifest)
+    LOGGER.info("Saved FAISS index and metadata for %s chunks.", len(chunk_list))
+
+
+def merge_chunks_into_index(
+    new_chunks: Sequence[dict[str, Any]],
+    *,
+    force_rebuild: bool = False,
+) -> int:
+    """Safely merge new chunks into the active knowledge base with deduplication and provenance."""
+    import faiss
+    import numpy as np
+    from sentence_transformers import SentenceTransformer
+
+    if not new_chunks:
+        LOGGER.info("No new chunks provided to merge.")
+        return 0
+
+    final_index = EMBEDDINGS_PATH / "faiss.index"
+    final_chunks = EMBEDDINGS_PATH / "chunks.pkl"
+
+    existing_chunks: list[dict[str, Any]] = []
+    if final_chunks.exists() and not force_rebuild:
+        try:
+            with final_chunks.open("rb") as handle:
+                existing_chunks = pickle.load(handle)
+        except Exception as exc:
+            LOGGER.warning("Could not read existing chunks.pkl (%s). Rebuilding fresh.", exc)
+
+    seen_texts = {
+        normalized_text_for_hash(str(c.get("text", ""))[:250])
+        for c in existing_chunks
+        if isinstance(c, Mapping) and c.get("text")
+    }
+
+    chunks_to_add: list[dict[str, Any]] = []
+    for c in new_chunks:
+        if not isinstance(c, Mapping):
+            continue
+        text = str(c.get("text", "")).strip()
+        if not text:
+            continue
+        norm_key = normalized_text_for_hash(text[:250])
+        if norm_key and norm_key not in seen_texts:
+            seen_texts.add(norm_key)
+            chunks_to_add.append(dict(c))
+
+    if not chunks_to_add:
+        LOGGER.info("All %s new chunks were duplicates of existing passages.", len(new_chunks))
+        return 0
+
+    LOGGER.info(
+        "Merging %s distinct chunks into active knowledge base (%s existing).",
+        len(chunks_to_add),
+        len(existing_chunks),
+    )
+
+    model = SentenceTransformer(EMBEDDING_MODEL)
+    new_texts = [str(c["text"]) for c in chunks_to_add]
+    batch_size = safe_int(os.getenv("EMBEDDING_BATCH_SIZE", 32), 32)
+    new_embeddings = model.encode(
+        new_texts,
+        batch_size=batch_size,
+        show_progress_bar=False,
+        convert_to_numpy=True,
+    )
+    new_embeddings = np.ascontiguousarray(new_embeddings, dtype="float32")
+    faiss.normalize_L2(new_embeddings)
+
+    if final_index.exists() and not force_rebuild and len(existing_chunks) > 0:
+        index = faiss.read_index(str(final_index))
+        if index.ntotal != len(existing_chunks):
+            LOGGER.warning(
+                "Index count (%s) != chunks count (%s). Rebuilding full index for safety.",
+                index.ntotal,
+                len(existing_chunks),
+            )
+            return merge_chunks_into_index(existing_chunks + chunks_to_add, force_rebuild=True)
+        index.add(new_embeddings)
+        combined_chunks = existing_chunks + chunks_to_add
+    else:
+        index = faiss.IndexFlatIP(new_embeddings.shape[1])
+        index.add(new_embeddings)
+        combined_chunks = chunks_to_add
+
+    manifest = {
+        "created_at": utc_now_iso(),
+        "updated_at": utc_now_iso(),
+        "embedding_model": EMBEDDING_MODEL,
+        "metric": "cosine",
+        "dimension": int(index.d),
+        "chunk_count": len(combined_chunks),
+    }
+
+    save_faiss_artifacts(combined_chunks, index=index, manifest=manifest)
+    return len(chunks_to_add)
 
 
 # ---------------------------------------------------------------------------
@@ -1410,7 +1626,12 @@ def process_local_pdfs(*, enable_ocr: bool = False) -> list[dict[str, Any]]:
     return chunks
 
 
-def process_missing_pdfs() -> None:
+def process_missing_pdfs(
+    *,
+    merge_into_index: bool = True,
+    enable_ocr: bool = False,
+) -> list[dict[str, Any]]:
+    """Extract missing local PDFs and safely merge them into the active index."""
     metadata_path = EMBEDDINGS_PATH / "chunks.pkl"
     embedded_sources: set[str] = set()
 
@@ -1436,7 +1657,7 @@ def process_missing_pdfs() -> None:
     updates: list[dict[str, Any]] = []
     for index, path in enumerate(missing, start=1):
         LOGGER.info("Extracting missing PDF %s/%s: %s", index, len(missing), path.name)
-        pages = extract_text_from_pdf(path, enable_ocr=True)
+        pages = extract_text_from_pdf(path, enable_ocr=enable_ocr)
         updates.extend(
             chunks_from_pages(
                 pages,
@@ -1454,6 +1675,12 @@ def process_missing_pdfs() -> None:
     updates = deduplicate_chunks(updates)
     atomic_write_json(PDF_UPDATES_PATH, updates)
     LOGGER.info("Saved %s missing-PDF chunks to %s", len(updates), PDF_UPDATES_PATH)
+
+    if merge_into_index and updates:
+        merged_count = merge_chunks_into_index(updates)
+        LOGGER.info("Successfully merged %s missing-PDF chunks into active FAISS index.", merged_count)
+
+    return updates
 
 
 # ---------------------------------------------------------------------------
@@ -1706,11 +1933,21 @@ def process_pdfs_and_links(
     atomic_write_json(output_path, all_chunks)
     LOGGER.info("Saved %s valid chunks to %s", len(all_chunks), output_path)
 
+    successful_sources = [s for s in crawl_reports if s.get("status") == "success" or s.get("accepted_documents", 0) > 0]
+    failed_sources = [s for s in crawl_reports if s.get("status") == "failed" or (s.get("failed_urls", 0) > 0 and s.get("accepted_documents", 0) == 0)]
+    skipped_sources = [s for s in crawl_reports if s.get("status") == "skipped" or (s.get("skipped_urls", 0) > 0 and s.get("visited_pages", 0) == 0)]
+
     report = {
         "created_at": utc_now_iso(),
         "mode": "links_only" if links_mode else "local_pdfs_only" if local_pdfs_only else "combined",
         "output_path": str(output_path),
         "total_chunks": len(all_chunks),
+        "summary": {
+            "total_sources_evaluated": len(crawl_reports),
+            "successful_sources_count": len(successful_sources),
+            "failed_sources_count": len(failed_sources),
+            "skipped_sources_count": len(skipped_sources),
+        },
         "sources": crawl_reports,
     }
     atomic_write_json(CRAWL_REPORT_PATH, report)
@@ -1718,7 +1955,28 @@ def process_pdfs_and_links(
     if skip_embeddings:
         LOGGER.info("Skipped FAISS rebuild as requested.")
     else:
-        save_faiss_artifacts(all_chunks)
+        metadata_path = EMBEDDINGS_PATH / "chunks.pkl"
+        other_chunks: list[dict[str, Any]] = []
+        if metadata_path.exists():
+            try:
+                with metadata_path.open("rb") as handle:
+                    existing_active = pickle.load(handle)
+                target_preserve = "local_pdf" if links_mode else "official_web"
+                other_chunks = [
+                    c for c in existing_active
+                    if isinstance(c, Mapping) and (
+                        c.get("source_type") == target_preserve
+                        or (target_preserve == "local_pdf" and not c.get("official"))
+                        or (target_preserve == "official_web" and c.get("official"))
+                    )
+                ]
+                if other_chunks:
+                    LOGGER.info("Preserving %s existing %s chunks in active index.", len(other_chunks), target_preserve)
+            except Exception as exc:
+                LOGGER.warning("Could not read active chunks for cross-preservation: %s", exc)
+
+        combined_to_index = deduplicate_chunks(all_chunks + other_chunks)
+        save_faiss_artifacts(combined_to_index)
 
     return all_chunks
 
@@ -1802,7 +2060,12 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--missing-pdfs-only",
         action="store_true",
-        help="Extract only local PDFs absent from active FAISS metadata.",
+        help="Extract only local PDFs absent from active FAISS metadata and merge them into index.",
+    )
+    parser.add_argument(
+        "--no-merge",
+        action="store_true",
+        help="When running --missing-pdfs-only, extract chunks without merging into the FAISS index.",
     )
     parser.add_argument(
         "--verbose",
@@ -1823,7 +2086,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             LOGGER.info("Deleted crawl state: %s", CRAWL_STATE_PATH)
 
         if args.missing_pdfs_only:
-            process_missing_pdfs()
+            process_missing_pdfs(
+                merge_into_index=not getattr(args, "no_merge", False),
+                enable_ocr=args.ocr_local_pdfs,
+            )
             return 0
 
         process_pdfs_and_links(

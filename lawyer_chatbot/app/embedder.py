@@ -1,132 +1,119 @@
+"""Production embedding pipeline for Pakistan Legal Knowledge Base.
+
+Converts all extracted statutory chunks into FAISS vector representations using
+SentenceTransformer (all-MiniLM-L6-v2) with L2-normalized Inner Product metric
+for exact cosine similarity search.
+"""
+
+from __future__ import annotations
+
 import json
+import os
 import pickle
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
-import os
-from pathlib import Path
 
 from app.config import (
-    EMBEDDINGS_DIR, OUTPUT_JSON, OFFICIAL_OUTPUT_JSON, PDF_UPDATES_JSON,
+    BASE_DIR,
+    EMBEDDINGS_DIR,
+    OUTPUT_JSON,
     EMBEDDING_MODEL,
 )
 
-# -------------------------------
-# Build FAISS embeddings from kb_chunks.json
-# -------------------------------
-def build_embeddings():
-    # Create embeddings dir if not exists
-    os.makedirs(str(EMBEDDINGS_DIR), exist_ok=True)
+INDEX_PATH = EMBEDDINGS_DIR / "faiss.index"
+CHUNKS_PATH = EMBEDDINGS_DIR / "chunks.pkl"
+MANIFEST_PATH = EMBEDDINGS_DIR / "index_manifest.json"
 
-    KB_FILE = str(OUTPUT_JSON)
-    INDEX_FILE = os.path.join(str(EMBEDDINGS_DIR), "faiss.index")
-    META_FILE = os.path.join(str(EMBEDDINGS_DIR), "chunks.pkl")
 
-    # Load chunks from JSON
-    if not os.path.exists(KB_FILE):
-        print(f"Error: KB file not found at {KB_FILE}")
-        print("Run loader.py first: python -m app.loader")
-        return
+def build_embeddings(batch_size: int = 128) -> None:
+    """Build or rebuild FAISS index from kb_chunks.json with cosine similarity."""
+    EMBEDDINGS_DIR.mkdir(parents=True, exist_ok=True)
 
-    print(f"Loading chunks from {KB_FILE}...")
-    with open(KB_FILE, "r", encoding="utf-8") as f:
+    if not OUTPUT_JSON.exists():
+        print(f"Error: {OUTPUT_JSON} not found. Run scripts/extract_all_pdfs.py first.")
+        sys.exit(1)
+
+    print(f"Loading legal chunks from {OUTPUT_JSON}...")
+    with open(OUTPUT_JSON, "r", encoding="utf-8") as f:
         chunks = json.load(f)
 
-    official_chunks = []
-    if OFFICIAL_OUTPUT_JSON.exists():
-        with open(OFFICIAL_OUTPUT_JSON, "r", encoding="utf-8") as f:
-            official_chunks = json.load(f)
-        chunks.extend(official_chunks)
-        print(f"Added {len(official_chunks)} official web chunks.")
-
-    if PDF_UPDATES_JSON.exists():
-        with open(PDF_UPDATES_JSON, "r", encoding="utf-8") as f:
-            pdf_updates = json.load(f)
-        chunks.extend(pdf_updates)
-        print(f"Added {len(pdf_updates)} newly extracted PDF chunks.")
-
     if not chunks:
-        print("No chunks found in KB file.")
+        print("Error: No chunks found in JSON.")
         return
 
-    # Filter empty and duplicate chunks across PDF and official web sources.
+    print(f"Loaded {len(chunks):,} statutory chunks.")
+
+    # Deduplicate by text content
     unique_chunks = []
-    seen_text = set()
-    for chunk in chunks:
-        normalized = " ".join(chunk.get("text", "").split())
-        if normalized and normalized not in seen_text:
-            seen_text.add(normalized)
-            unique_chunks.append(chunk)
+    seen_texts = set()
+    for c in chunks:
+        norm = " ".join(c.get("text", "").split())
+        if norm and norm not in seen_texts:
+            seen_texts.add(norm)
+            unique_chunks.append(c)
+
     chunks = unique_chunks
-    print(f"Loaded {len(chunks)} valid chunks.")
+    texts = [c["text"] for c in chunks]
+    print(f"Total deduplicated chunks to index: {len(texts):,}")
 
-    texts = [c['text'] for c in chunks]
-
-    # Reuse the existing base vectors when they exactly match the local JSON.
-    # This makes adding newly scraped official laws much faster.
-    existing_index = None
-    existing_chunks = []
-    if os.path.exists(INDEX_FILE) and os.path.exists(META_FILE):
-        try:
-            existing_index = faiss.read_index(INDEX_FILE)
-            with open(META_FILE, "rb") as f:
-                existing_chunks = pickle.load(f)
-            local_normalized = {" ".join(c.get("text", "").split()) for c in json.load(open(KB_FILE, encoding="utf-8"))}
-            existing_normalized = {" ".join(c.get("text", "").split()) for c in existing_chunks}
-            if (
-                existing_index.ntotal != len(existing_chunks)
-                or not local_normalized.issubset(existing_normalized)
-            ):
-                existing_index = None
-                existing_chunks = []
-        except Exception as exc:
-            print(f"Existing index cannot be reused: {exc}")
-            existing_index = None
-            existing_chunks = []
-
-    # Load embedding model
     print(f"Loading embedding model: {EMBEDDING_MODEL}...")
     model = SentenceTransformer(EMBEDDING_MODEL)
 
-    # Generate embeddings
-    if existing_index is not None:
-        known = {" ".join(c.get("text", "").split()) for c in existing_chunks}
-        chunks_to_add = [c for c in chunks if " ".join(c.get("text", "").split()) not in known]
-        texts = [c["text"] for c in chunks_to_add]
-        print(f"Reusing {existing_index.ntotal} vectors; encoding {len(texts)} new chunks...")
-    else:
-        chunks_to_add = chunks
-        print(f"Encoding {len(texts)} chunks into embeddings...")
+    print(f"Encoding {len(texts):,} passages with batch_size={batch_size}...")
+    t0 = time.time()
+    embeddings = model.encode(
+        texts,
+        batch_size=batch_size,
+        show_progress_bar=True,
+        convert_to_numpy=True,
+    ).astype("float32")
+    encoding_time = time.time() - t0
+    print(f"Encoding complete in {encoding_time:.1f}s ({len(texts)/encoding_time:.1f} chunks/sec).")
 
-    embeddings = model.encode(texts, convert_to_numpy=True, show_progress_bar=True, batch_size=64)
+    # L2-normalize vectors for exact Cosine Similarity with Inner Product index
+    print("Normalizing vectors for cosine similarity...")
+    faiss.normalize_L2(embeddings)
 
-    # Ensure float32 for FAISS
-    embeddings = np.array(embeddings).astype('float32')
-
-    # Create FAISS index
     dim = embeddings.shape[1]
-    print(f"Creating FAISS index with dimension {dim}...")
-    if existing_index is not None:
-        if existing_index.d != dim:
-            raise ValueError(f"Embedding dimension changed: {existing_index.d} != {dim}")
-        index = existing_index
-        index.add(embeddings)
-        chunks = existing_chunks + chunks_to_add
-    else:
-        index = faiss.IndexFlatL2(dim)
-        index.add(embeddings)
+    print(f"Constructing FAISS IndexFlatIP (dimension {dim})...")
+    index = faiss.IndexFlatIP(dim)
+    index.add(embeddings)
+    print(f"Indexed {index.ntotal:,} vectors in FAISS.")
 
-    # Save FAISS index and metadata
-    index_temp = INDEX_FILE + ".tmp"
-    metadata_temp = META_FILE + ".tmp"
-    faiss.write_index(index, index_temp)
-    with open(metadata_temp, 'wb') as f:
-        pickle.dump(chunks, f)
-    os.replace(index_temp, INDEX_FILE)
-    os.replace(metadata_temp, META_FILE)
-    print(f"FAISS index saved at: {INDEX_FILE}")
-    print(f"Chunk metadata saved at: {META_FILE}")
-    print(f"Successfully processed {len(chunks)} chunks.")
+    # Atomic persistence
+    temp_index = EMBEDDINGS_DIR / ".faiss.index.tmp"
+    temp_chunks = EMBEDDINGS_DIR / ".chunks.pkl.tmp"
+    temp_manifest = EMBEDDINGS_DIR / ".index_manifest.tmp"
+
+    faiss.write_index(index, str(temp_index))
+    with open(temp_chunks, "wb") as f:
+        pickle.dump(chunks, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    manifest = {
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "embedding_model": EMBEDDING_MODEL,
+        "metric": "cosine",
+        "dimension": dim,
+        "chunk_count": len(chunks),
+    }
+    with open(temp_manifest, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2)
+
+    os.replace(temp_index, INDEX_PATH)
+    os.replace(temp_chunks, CHUNKS_PATH)
+    os.replace(temp_manifest, MANIFEST_PATH)
+
+    print(f"Saved FAISS index to {INDEX_PATH}")
+    print(f"Saved chunk metadata to {CHUNKS_PATH}")
+    print(f"Saved index manifest to {MANIFEST_PATH}")
+    print("Knowledge base indexing complete!")
 
 
 if __name__ == "__main__":

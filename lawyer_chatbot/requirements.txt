@@ -16,3 +16,7 @@ accelerate
 langdetect
 numpy
 python-multipart
+python-docx
+
+# Optional dependencies:
+# rapidocr-onnxruntime  # Required only if --ocr-local-pdfs or --ocr-remote-pdfs is used on scanned images

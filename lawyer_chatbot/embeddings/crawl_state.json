@@ -1,8 +1,21 @@
 {
   "completed_sources": [
+    "https://cc.gov.pk/home/mrtpo_law",
     "https://drs.molaw.gov.pk/documents",
+    "https://ecp.gov.pk/electoral-laws-and-system",
+    "https://pvara.gov.pk/regulations",
+    "https://www.cda.gov.pk/lawsAndRegulations",
+    "https://www.dra.gov.pk/about-us/legislation/acts/",
+    "https://www.dra.gov.pk/about-us/legislation/regulations/",
+    "https://www.dra.gov.pk/about-us/legislation/rules/",
+    "https://www.fmu.gov.pk/circulars-notifications/fmu-notifications/",
+    "https://www.nepra.org.pk/Legal.php",
+    "https://www.ogra.org.pk/codes",
+    "https://www.sbp.org.pk/laws-regulations",
     "https://www.secp.gov.pk/laws/acts/",
+    "https://www.secp.gov.pk/laws/notifications/",
     "https://www.secp.gov.pk/laws/ordinances/",
+    "https://www.secp.gov.pk/laws/regulations/",
     "https://www.secp.gov.pk/laws/rules/"
   ],
   "failed_sources": {
@@ -41,208 +54,117 @@
       "errors": [],
       "last_attempt": "2026-07-25T06:31:29+00:00"
     },
-    "https://www.secp.gov.pk/laws/regulations/": {
-      "name": "Securities and Exchange Commission of Pakistan - Regulations",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:06:31+00:00"
-    },
-    "https://www.secp.gov.pk/laws/notifications/": {
-      "name": "Securities and Exchange Commission of Pakistan - Notifications",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:06:46+00:00"
-    },
-    "https://www.sbp.org.pk/laws-regulations": {
-      "name": "State Bank of Pakistan - Laws and Regulations",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:07:01+00:00"
-    },
-    "https://www.fmu.gov.pk/circulars-notifications/fmu-notifications/": {
-      "name": "Financial Monitoring Unit - Notifications",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:07:16+00:00"
-    },
-    "https://cc.gov.pk/home/mrtpo_law": {
-      "name": "Competition Commission of Pakistan - Competition Law",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:07:31+00:00"
-    },
     "https://www.ppra.org.pk/Rules.asp": {
       "name": "Public Procurement Regulatory Authority - Rules",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:07:46+00:00"
+      "last_attempt": "2026-07-25T13:51:07+00:00"
     },
     "https://www.ppra.org.pk/regulation.asp": {
       "name": "Public Procurement Regulatory Authority - Regulations",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:08:00+00:00"
-    },
-    "https://ecp.gov.pk/electoral-laws-and-system": {
-      "name": "Election Commission of Pakistan - Electoral Laws and System",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:08:17+00:00"
+      "last_attempt": "2026-07-25T13:52:12+00:00"
     },
     "https://www.pta.gov.pk/category/rules-824773436-2023-05-30": {
       "name": "Pakistan Telecommunication Authority - Rules",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:08:35+00:00"
+      "last_attempt": "2026-07-25T14:00:07+00:00"
     },
     "https://www.pta.gov.pk/category/regulations-1674158059-2023-05-30": {
       "name": "Pakistan Telecommunication Authority - Regulations",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:08:51+00:00"
+      "last_attempt": "2026-07-25T14:01:11+00:00"
     },
     "https://pemra.gov.pk/legislation/": {
       "name": "Pakistan Electronic Media Regulatory Authority - Legislation",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:09:06+00:00"
+      "last_attempt": "2026-07-25T14:02:33+00:00"
     },
     "https://www.pda.gov.pk/acts-and-regulations.php": {
       "name": "Pakistan Digital Authority - Acts and Regulations",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:09:20+00:00"
-    },
-    "https://pvara.gov.pk/regulations": {
-      "name": "Pakistan Virtual Assets Regulatory Authority - Regulations",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:09:35+00:00"
-    },
-    "https://www.dra.gov.pk/about-us/legislation/acts/": {
-      "name": "Drug Regulatory Authority of Pakistan - Acts",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:09:49+00:00"
-    },
-    "https://www.dra.gov.pk/about-us/legislation/rules/": {
-      "name": "Drug Regulatory Authority of Pakistan - Rules",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:10:03+00:00"
-    },
-    "https://www.dra.gov.pk/about-us/legislation/regulations/": {
-      "name": "Drug Regulatory Authority of Pakistan - Regulations",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:10:22+00:00"
-    },
-    "https://www.nepra.org.pk/Legal.php": {
-      "name": "National Electric Power Regulatory Authority - Legal Framework",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:10:41+00:00"
-    },
-    "https://www.ogra.org.pk/codes": {
-      "name": "Oil and Gas Regulatory Authority - Codes, Laws, Rules and Regulations",
-      "jurisdiction": "Federal",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:11:00+00:00"
+      "last_attempt": "2026-07-25T14:03:53+00:00"
     },
     "https://petroleum.gov.pk/": {
       "name": "Petroleum Division - Acts, Rules and Policies",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:11:20+00:00"
+      "last_attempt": "2026-07-25T16:02:29+00:00"
     },
     "https://environment.gov.pk/SiteImage/Misc/files/listlawregulation.pdf": {
       "name": "Pakistan Environmental Protection Agency - List of Environmental Laws and Regulations",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:11:39+00:00"
+      "last_attempt": "2026-07-25T16:04:35+00:00"
     },
     "https://www.pnra.org/estab-rf-work.html": {
       "name": "Pakistan Nuclear Regulatory Authority - Regulatory Framework",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:11:58+00:00"
+      "last_attempt": "2026-07-25T16:06:43+00:00"
     },
     "https://www.pnra.org/regulations.html": {
       "name": "Pakistan Nuclear Regulatory Authority - Regulations",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:12:19+00:00"
+      "last_attempt": "2026-07-25T16:08:44+00:00"
     },
     "https://fia.gov.pk/laws": {
       "name": "Federal Investigation Agency - Laws",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:12:42+00:00"
+      "last_attempt": "2026-07-25T16:10:46+00:00"
     },
     "https://nab.gov.pk/downloads/": {
       "name": "National Accountability Bureau - Laws and Downloads",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:13:01+00:00"
+      "last_attempt": "2026-07-25T16:13:11+00:00"
     },
     "https://dgip.gov.pk/passport/downloads.php": {
       "name": "Directorate General of Immigration and Passports - Passport Acts and Rules",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:13:22+00:00"
+      "last_attempt": "2026-07-25T16:15:04+00:00"
     },
     "https://dgps.gov.pk/Detail/NTM5Yjc4OGQtNWRiMC00NTE0LTk0YzEtMmFmZjQwMDNhZjVm": {
       "name": "Directorate General Ports and Shipping - Maritime Laws",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:13:43+00:00"
+      "last_attempt": "2026-07-25T16:17:23+00:00"
     },
     "https://www.psw.gov.pk/public/trade-information-portal": {
       "name": "Pakistan Single Window - Trade Information Portal",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:14:02+00:00"
-    },
-    "https://www.cda.gov.pk/lawsAndRegulations": {
-      "name": "Capital Development Authority - Laws and Regulations",
-      "jurisdiction": "Islamabad Capital Territory",
-      "failed_urls": 1,
-      "errors": [],
-      "last_attempt": "2026-07-25T06:14:22+00:00"
+      "last_attempt": "2026-07-25T16:19:49+00:00"
     },
     "https://www.mora.gov.pk/Detail/ODNkNTZjMDgtNjk1OS00YjhjLThkZGUtNWRkYTJlZWE4ZTY5": {
       "name": "Ministry of Religious Affairs and Interfaith Harmony - Acts and Rules",
       "jurisdiction": "Federal",
       "failed_urls": 1,
       "errors": [],
-      "last_attempt": "2026-07-25T06:14:44+00:00"
+      "last_attempt": "2026-07-25T16:39:13+00:00"
     },
     "https://punjablaws.gov.pk/": {
       "name": "Punjab Laws Online",
@@ -546,5 +468,5 @@
       "last_attempt": "2026-07-25T06:27:58+00:00"
     }
   },
-  "updated_at": "2026-07-25T08:39:35+00:00"
+  "updated_at": "2026-07-25T16:39:13+00:00"
 }

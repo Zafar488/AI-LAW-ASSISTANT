@@ -9,3 +9,9 @@ __pycache__/
 .streamlit/secrets.toml
 logs/
 *.log
+*.db
+*.db-wal
+*.db-shm
+
+
+

@@ -1,0 +1,33 @@
+# Python virtual environments
+.venv/
+lawyer_chatbot/.venv/
+.venv_new/
+.scrape-env/
+myenv/
+venv/
+env/
+
+# Python cache & compiled bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs and SQLite runtime databases
+logs/
+lawyer_chatbot/logs/
+*.log
+*.db
+*.db-wal
+*.db-shm
+
+# Streamlit secrets
+.streamlit/secrets.toml
+lawyer_chatbot/.streamlit/secrets.toml
+
+# OS artifacts
+Thumbs.db
+.DS_Store
